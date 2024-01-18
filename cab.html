@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cab Booking</title>
+    <!-- Bootstrap CSS Link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom Styles -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+        .navbar {
+            background-color: #28a745; /* Green color for cab booking */
+            color: #ffffff;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        #cabResults {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        footer {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Tour 360&deg;</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index1.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+               
+            </ul>
+        </div>
+    </nav>
+
+
+    <!-- Main Content - Home -->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2>Welcome to Tour360&deg; Cab Booking</h2>
+            <form id="searchForm" onsubmit="searchCabs(event)">
+                <div class="form-group">
+                    <label for="source">Pickup Location</label>
+                    <select class="form-control" id="source">
+                        <option value="">Select pickup location</option>
+                        <option value="Varanasi_Cantt">Varanasi Cantt</option>
+                        <option value="BHU_Campus">BHU Campus</option>
+                        <option value="Assi_Ghat">Assi Ghat</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="destination">Drop-off Location</label>
+                    <select class="form-control" id="destination">
+                        <option value="">Select drop-off location</option>
+                        <option value="Varanasi_Cantt">Varanasi Cantt</option>
+                        <option value="BHU_Campus">BHU Campus</option>
+                        <option value="Assi_Ghat">Assi Ghat</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date and Time</label>
+                    <input type="datetime-local" class="form-control" id="date">
+                </div>
+                <button type="submit" class="btn btn-success">Search Cabs</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Placeholder Content -->
+    <div class="container mt-4" id="cabResults" style="display: none;">
+        <h3>Available Cabs</h3>
+        <div class="row" id="cabCards"></div>
+    </div>
+
+    
+
+    <!-- Bootstrap JS and Popper.js Links -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        function searchCabs(event) {
+            event.preventDefault();
+
+            const source = document.getElementById("source").value.trim();
+            const destination = document.getElementById("destination").value.trim();
+            const date = document.getElementById("date").value.trim();
+
+            if (!source || !destination || !date) {
+                alert("Please fill in all the fields.");
+                return;
+            }
+
+            const cabResultsContainer = document.getElementById("cabResults");
+            const cabCardsContainer = document.getElementById("cabCards");
+
+            cabCardsContainer.innerHTML = "";
+
+            // Mock data for available cabs
+            const cabs = [
+                { name: "Cab 1", source, destination, dateTime: date, fare: "$20" },
+                { name: "Cab 2", source, destination, dateTime: date, fare: "$25" },
+                { name: "Cab 3", source, destination, dateTime: date, fare: "$18" }
+            ];
+
+            cabResultsContainer.style.display = "block";
+
+            cabs.forEach(cab => {
+                const cardDiv = document.createElement("div");
+                cardDiv.classList.add("col-md-4");
+
+                cardDiv.innerHTML = `
+                    <form class="card mb-4" action="cabbooking.php" method="post">
+                        <div class="card-body">
+                            <h5 class="card-title">${cab.name}</h5>
+                            <p class="card-text">From ${cab.source} to ${cab.destination}</p>
+                            <p class="card-text">Date and Time: ${cab.dateTime}</p>
+                            <p class="card-text">Fare: ${cab.fare}</p>
+                            <button class="btn btn-success">Book Now</button>
+                            <input type="text" name="cabname" value="${cab.name}" style="display: none !important;">
+                            <input type="text" name="source" value="${cab.source}" style="display: none !important;">
+                            <input type="text" name="destination" value="${cab.destination}" style="display: none !important;">
+                            <input type="text" name="dateTime" value="${cab.dateTime}" style="display: none !important;">
+                            <input type="text" name="fare" value="${cab.fare}" style="display: none !important;">
+                        </div>
+                    </form>
+                `;
+
+                cabCardsContainer.appendChild(cardDiv);
+            });
+        }
+    </script>
+</body>
+</html>
