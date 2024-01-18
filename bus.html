@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Booking</title>
+    <!-- Bootstrap CSS Link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom Styles -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+        .navbar {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        #busResults {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        footer {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+  
+
+    <!-- Main Content - Home -->
+    <div class="container mt-4">
+        <div class="row ">
+            <div class="col-md-6 offset-md-3">
+                <h2>Welcome to Bus Booking on Tour360 &deg;</h2>
+                <form id="searchForm" onsubmit="searchBuses(event)">
+                    <div class="form-group">
+                        <label for="source">Source</label>
+                        <select class="form-control" id="source">
+                            <option value="">Select source</option>
+                            <option value="Mumbai">Mumbai</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Kolkata">Kolkata</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">Destination</label>
+                        <select class="form-control" id="destination">
+                            <option value="">Select destination</option>
+                            <option value="Chennai">Chennai</option>
+                            <option value="Hyderabad">Hyderabad</option>
+                            <option value="Jaipur">Jaipur</option>
+                            <option value="Ahmedabad">Ahmedabad</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date of Travel</label>
+                        <input type="date" class="form-control" id="date">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search Buses</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Placeholder Content -->
+    <div class="container mt-4" id="busResults" style="display: none;">
+        <h3>Available Buses</h3>
+        <div class="row" id="busCards"></div>
+    </div>
+
+    <!-- Footer -->
+
+
+    <!-- Bootstrap JS and Popper.js Links -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        function searchBuses(event) {
+            event.preventDefault(); // Prevent form submission for now (you can handle form submission using AJAX)
+
+            // Get selected source and destination values
+            const source = document.getElementById("source").value;
+            const destination = document.getElementById("destination").value;
+            const date = document.getElementById("date").value.trim();
+
+            // Check if all fields are filled
+            if (!source || !destination || !date) {
+                alert("Please fill in all the fields.");
+                return;
+            }
+
+            // Simulate fetching data from a server (replace this with actual API calls)
+            const busResultsContainer = document.getElementById("busResults");
+            const busCardsContainer = document.getElementById("busCards");
+
+            // Clear previous results
+            busCardsContainer.innerHTML = "";
+
+            // Add placeholder buses
+            const buses = [
+                { name: "Bus 1", source: source, destination: destination, departureTime: "10:00 AM", arrivalTime: "2:00 PM", price: "$30" },
+                { name: "Bus 2", source: source, destination: destination, departureTime: "12:00 PM", arrivalTime: "4:00 PM", price: "$25" },
+                { name: "Bus 3", source: source, destination: destination, departureTime: "2:00 PM", arrivalTime: "6:00 PM", price: "$35" }
+            ];
+
+            // Display the search results container
+            busResultsContainer.style.display = "block";
+
+            // Render bus cards
+            buses.forEach(bus => {
+                const cardDiv = document.createElement("div");
+                cardDiv.classList.add("col-md-4");
+
+                cardDiv.innerHTML = `
+                    <form class="card mb-4 action="busbooking.php" method="post">
+                        <div class="card-body">
+                            <h5 class="card-title">${bus.name}</h5>
+                            <p class="card-text">From ${bus.source} to ${bus.destination}</p>
+                            <p class="card-text">Departure: ${bus.departureTime} | Arrival: ${bus.arrivalTime}</p>
+                            <p class="card-text">Price: ${bus.price}</p>
+                            <button class="btn btn-primary">Book Now</button>
+                            <input type="text" name="busname" value="${bus.name}" style="display: none !important;">
+                            <input type="text" name="source" value="${bus.source}" style="display: none !important;">
+                            <input type="text" name="destination" value="${bus.destination}" style="display: none !important;">
+                            <input type="text" name="departureTime" value="${bus.departureTime}" style="display: none !important;">
+                            <input type="text" name="arrivalTime" value="${bus.arrivalTime}" style="display: none !important;">
+                            <input type="text" name="price" value="${bus.price}" style="display: none !important;">
+                        </div>
+                    </form>
+                `;
+
+                busCardsContainer.appendChild(cardDiv);
+            });
+        }
+    </script>
+</body>
+</html>
